@@ -1,12 +1,6 @@
 # LaCA
 Method for atomistic identification of Laves phases and their lattice defects
 
-    __         _________ 
-   / /  ____ _/ ____/   |
-  / /  / __ `/ /   / /| |
- / /__/ /_/ / /___/ ___ |
-/_____|__,_/\____/_/  |_|
-                         
 Laves phase Crystal Analysis (LaCA) is a tool to analyze Laves phases and their lattice defects in atomistic simulations.
 This document gives a tutorial on how to use LaCA on analzying Laves phase atomistic structures.
 
