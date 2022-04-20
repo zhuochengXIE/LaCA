@@ -174,8 +174,6 @@ pipeline = import_file(fConfig)
 data = pipeline.compute()
 filename=fConfig
 
-nr_atoms = data.particles.count
-
 # Set up the Voronoi analysis modifier.
 def assign_particle_radii(frame, data):
     atom_types = data.particles_.particle_types_
@@ -186,77 +184,54 @@ pipeline.modifiers.append(assign_particle_radii)
 pipeline.modifiers.append(VoronoiAnalysisModifier(compute_indices = True, use_radii = pdvoro))
 data = pipeline.compute()
 
-#print('voronoi time:', datetime.now() - begin_time)
-
-pipeline.modifiers.append(ComputePropertyModifier(output_property = 'voro3', expressions = ['VoronoiIndex.3']))
-pipeline.modifiers.append(ComputePropertyModifier(output_property = 'voro4', expressions = ['VoronoiIndex.4']))
 pipeline.modifiers.append(ComputePropertyModifier(output_property = 'voro5', expressions = ['VoronoiIndex.5']))
 pipeline.modifiers.append(ComputePropertyModifier(output_property = 'voro6', expressions = ['VoronoiIndex.6']))
 
-export_file(pipeline, 'All_tmp.dump', 'netcdf/amber', columns = ['Particle Identifier', 'Particle Type', 'Position.X', 'Position.Y', 'Position.Z', 'voro3', 'voro4', 'voro5', 'voro6'])
+#print('voronoi time:', datetime.now() - begin_time)
 
+# Set up the csp modifier.
 def exportELSE_type0(frame, data):
-    data.apply(ExpressionSelectionModifier(expression = '(voro3 == 0 && voro4 == 0 && voro5 == 12 && voro6 == 4) || (voro3 != 0 || voro4 != 0 || voro5 != 12 || voro6 != 0)'))
-    data.apply(InvertSelectionModifier())
-    data.apply(DeleteSelectedModifier())
-    data.apply(ComputePropertyModifier(output_property = 'Centrosymmetry', expressions = ['-1']))
+    data.apply(ExpressionSelectionModifier(expression = '(VoronoiIndex.3 == 0 && VoronoiIndex.4 == 0 && VoronoiIndex.5 == 12 && VoronoiIndex.6 == 4) || (VoronoiIndex.3 != 0 || VoronoiIndex.4 != 0 || VoronoiIndex.5 != 12 || VoronoiIndex.6 != 0)'))
+    data.apply(ComputePropertyModifier(output_property = 'Centrosymmetry', expressions = ['-1'], only_selected = True))
     
 def exportICO_type0(frame, data):
-    data.apply(ExpressionSelectionModifier(expression = '(voro3 == 0 && voro4 == 0 && voro5 == 12 && voro6 == 4) || (voro3 != 0 || voro4 != 0 || voro5 != 12 || voro6 != 0)'))
-    data.apply(DeleteSelectedModifier())
-    data.apply(CentroSymmetryModifier(num_neighbors = 6))
+    data.apply(ExpressionSelectionModifier(expression = '(VoronoiIndex.3 == 0 && VoronoiIndex.4 == 0 && VoronoiIndex.5 == 12 && VoronoiIndex.6 == 4) || (VoronoiIndex.3 != 0 || VoronoiIndex.4 != 0 || VoronoiIndex.5 != 12 || VoronoiIndex.6 != 0)'))
+    data.apply(InvertSelectionModifier())
+    data.apply(CentroSymmetryModifier(num_neighbors = 6, only_selected = True))
     
 def exportELSE_type1(frame, data):
-    data.apply(ExpressionSelectionModifier(expression = '(voro3 == 0 && voro4 == 0 && voro5 == 12 && voro6 == 4) || (ParticleType==1 && (voro3 != 0 || voro4 != 0 || voro5 != 12 || voro6 != 0))'))
-    data.apply(InvertSelectionModifier())
-    data.apply(DeleteSelectedModifier())
-    data.apply(ComputePropertyModifier(output_property = 'Centrosymmetry', expressions = ['-1']))
+    data.apply(ExpressionSelectionModifier(expression = '(VoronoiIndex.3 == 0 && VoronoiIndex.4 == 0 && VoronoiIndex.5 == 12 && VoronoiIndex.6 == 4) || (ParticleType==1 && (VoronoiIndex.3 != 0 || VoronoiIndex.4 != 0 || VoronoiIndex.5 != 12 || VoronoiIndex.6 != 0))'))
+    data.apply(ComputePropertyModifier(output_property = 'Centrosymmetry', expressions = ['-1'], only_selected = True))
     
 def exportICO_type1(frame, data):
-    data.apply(ExpressionSelectionModifier(expression = '(voro3 == 0 && voro4 == 0 && voro5 == 12 && voro6 == 4) || (ParticleType==1 && (voro3 != 0 || voro4 != 0 || voro5 != 12 || voro6 != 0))'))
-    data.apply(DeleteSelectedModifier())
-    data.apply(CentroSymmetryModifier(num_neighbors = 6))
+    data.apply(ExpressionSelectionModifier(expression = '(VoronoiIndex.3 == 0 && VoronoiIndex.4 == 0 && VoronoiIndex.5 == 12 && VoronoiIndex.6 == 4) || (ParticleType==1 && (VoronoiIndex.3 != 0 || VoronoiIndex.4 != 0 || VoronoiIndex.5 != 12 || VoronoiIndex.6 != 0))'))
+    data.apply(InvertSelectionModifier())
+    data.apply(CentroSymmetryModifier(num_neighbors = 6, only_selected = True))
     
 def exportELSE_type2(frame, data):
-    data.apply(ExpressionSelectionModifier(expression = '(voro3 == 0 && voro4 == 0 && voro5 == 12 && voro6 == 4) || (ParticleType==2 && (voro3 != 0 || voro4 != 0 || voro5 != 12 || voro6 != 0))'))
-    data.apply(InvertSelectionModifier())
-    data.apply(DeleteSelectedModifier())
-    data.apply(ComputePropertyModifier(output_property = 'Centrosymmetry', expressions = ['-1']))
+    data.apply(ExpressionSelectionModifier(expression = '(VoronoiIndex.3 == 0 && VoronoiIndex.4 == 0 && VoronoiIndex.5 == 12 && VoronoiIndex.6 == 4) || (ParticleType==2 && (VoronoiIndex.3 != 0 || VoronoiIndex.4 != 0 || VoronoiIndex.5 != 12 || VoronoiIndex.6 != 0))'))
+    data.apply(ComputePropertyModifier(output_property = 'Centrosymmetry', expressions = ['-1'], only_selected = True))
     
 def exportICO_type2(frame, data):
-    data.apply(ExpressionSelectionModifier(expression = '(voro3 == 0 && voro4 == 0 && voro5 == 12 && voro6 == 4) || (ParticleType==2 && (voro3 != 0 || voro4 != 0 || voro5 != 12 || voro6 != 0))'))
-    data.apply(DeleteSelectedModifier())
-    data.apply(CentroSymmetryModifier(num_neighbors = 6))
+    data.apply(ExpressionSelectionModifier(expression = '(VoronoiIndex.3 == 0 && VoronoiIndex.4 == 0 && VoronoiIndex.5 == 12 && VoronoiIndex.6 == 4) || (ParticleType==2 && (VoronoiIndex.3 != 0 || VoronoiIndex.4 != 0 || VoronoiIndex.5 != 12 || VoronoiIndex.6 != 0))'))
+    data.apply(InvertSelectionModifier())
+    data.apply(CentroSymmetryModifier(num_neighbors = 6, only_selected = True))
 
 if type == [0]:
-    pipeline1 = import_file('All_tmp.dump')
-    pipeline1.modifiers.append(exportELSE_type0)
-    pipeline2 = import_file('All_tmp.dump')
-    pipeline2.modifiers.append(exportICO_type0)
-
-elif type == [1]:
-    pipeline1 = import_file('All_tmp.dump')
-    pipeline1.modifiers.append(exportELSE_type1)
-    pipeline2 = import_file('All_tmp.dump')
-    pipeline2.modifiers.append(exportICO_type1)
+    pipeline.modifiers.append(exportICO_type0)
+    pipeline.modifiers.append(exportELSE_type0)
     
+elif type == [1]:
+    pipeline.modifiers.append(exportICO_type1)
+    pipeline.modifiers.append(exportELSE_type1)
+
 elif type == [2]:
-    pipeline1 = import_file('All_tmp.dump')
-    pipeline1.modifiers.append(exportELSE_type2)
-    pipeline2 = import_file('All_tmp.dump')
-    pipeline2.modifiers.append(exportICO_type2)
+    pipeline.modifiers.append(exportICO_type2)
+    pipeline.modifiers.append(exportELSE_type2)
 
-export_file(pipeline1, 'Else_tmp.dump', 'netcdf/amber', columns = ['Particle Identifier', 'Particle Type', 'Position.X', 'Position.Y', 'Position.Z', 'voro5', 'voro6', 'Centrosymmetry'])
+data = pipeline.compute()
 
-modifier = CombineDatasetsModifier()
-modifier.source.load('Else_tmp.dump')
-pipeline2.modifiers.append(modifier)
-data = pipeline2.compute()
-
-rm_tmp = "rm All_tmp.dump Else_tmp.dump"
-subprocess.check_call(rm_tmp, shell=True)
-
-#print('csp+I/O time:', datetime.now() - begin_time)
+#print('csp time:', datetime.now() - begin_time)
 
 ##########################################################################################
 # Build neighbor list
