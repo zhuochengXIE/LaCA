@@ -20,7 +20,7 @@ In order to use the CNA to identify Z12 and Z16 Frank-Kasper clusters, the sourc
 
 ################  Software and library requirements ###############
 
-ovito-pro 3.7.3 +
+ovito-pro 3.7.4 +
 
 ################ File structure ################
 
@@ -28,7 +28,7 @@ ovito_state_files                               # ovito state files to load save
 
 Case_studies                                    # Case studies including NEB calculation on synchroshear, nanoindentation, and slip transmission
 
-ovito_Laves_crystal_analysis_Voronoibased_v1.1.py    # Script of the Voronoi-based LaCA
+ovito_Laves_crystal_analysis_Voronoibased.py    # Script of the Voronoi-based LaCA
 
 ################  Perform Voronoi-based LaCA on the lammps dump file ################
 
