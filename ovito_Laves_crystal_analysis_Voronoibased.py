@@ -1,7 +1,7 @@
 """
 Ovito script to analyze Laves phases (C14, C15, C36) and their lattice defects
 Based on Voronoi index to identify atomic clusters
-Work with Ovito Pro version 3.7.3
+Work with Ovito Pro version 3.7.4
 @author: Zhuocheng Xie
 @date:   Thu Apr 14 11:02:01 CEST 2022
 @usage:  ovitos ./ovito_Laves_crystal_analysis_voronoibased.py -f <CONFIG> [-r <AtomicRadii>] [-t <ParticleType>] [-h <HELP>]
